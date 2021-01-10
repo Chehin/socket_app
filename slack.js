@@ -29,8 +29,8 @@ io.on('connection', (socket) => {
 
 // loop through each namespace and listen for a connection
 namespaces.forEach((namespace) => {
-    // console.log(namespace)
-    // const thisNs = io.of(namespace.endpoint)
+    console.log('namespace es : ', namespace)
+        // const thisNs = io.of(namespace.endpoint)
     io.of(namespace.endpoint).on('connection', (nsSocket) => {
         console.log(nsSocket.handshake)
         const username = nsSocket.handshake.query.username;
@@ -57,12 +57,12 @@ namespaces.forEach((namespace) => {
         })
         nsSocket.on('newMessageToServer', (msg) => {
             const fullMsg = {
-                    text: msg.text,
-                    time: Date.now(),
-                    username: username,
-                    avatar: 'https://via.placeholder.com/30'
-                }
-                // console.log(fullMsg)
+                text: msg.text,
+                time: Date.now(),
+                username: username,
+                avatar: 'https://via.placeholder.com/30'
+            }
+            console.log('fullMsg : ', fullMsg)
                 // Send this message to ALL the sockets that are in the room that THIS socket is in.
                 // how can we find out what rooms THIS socket is in?
                 // console.log(nsSocket.rooms)
@@ -75,7 +75,7 @@ namespaces.forEach((namespace) => {
                     return room.roomTitle === roomTitle;
                 })
                 // console.log("The room object that we made that matches this NS room is...")
-                // console.log(nsRoom)
+            console.log('nsRoom es : ', nsRoom);
             nsRoom.addMessage(fullMsg);
             io.of(namespace.endpoint).to(roomTitle).emit('messageToClients', fullMsg)
         })
